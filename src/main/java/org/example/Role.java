@@ -22,7 +22,11 @@ public class Role extends JFrame{
     private JComboBox comboBox4;
     private JComboBox comboBox5;
     private JComboBox comboBox6;
+
+
     private JTable table1;
+    private JComboBox comboBox7;
+    private JButton btnHome;
     Connection con = DatabaseConnection.getConnection();
 
     public Role() {
@@ -44,7 +48,14 @@ public class Role extends JFrame{
         comboBox4.addItem("INSERT");
         comboBox4.addItem("UPDATE");
         comboBox4.addItem("DELETE");
+
+
+        comboBox3.addItem("admin");
+        comboBox3.addItem("nv");
+
         setData5();
+
+        setData6();
         btnGrant.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -197,6 +208,61 @@ public class Role extends JFrame{
 
 
         });
+        btnGrantPro.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(comboBox3.getSelectedItem()==null){
+                    JOptionPane.showMessageDialog(null, "Vui lòng chọn đầy đủ thông tin cần grant role");
+                    return;
+                }
+                else{
+
+                    String sql="GRANT "+comboBox3.getSelectedItem()+ " TO "+comboBox7.getSelectedItem();
+                    PreparedStatement stmt = null;
+                    try {
+                        stmt = con.prepareStatement(sql);
+                        stmt.execute();
+                        JOptionPane.showMessageDialog(null, "Grant successfully");
+                        setData5();
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                        JOptionPane.showMessageDialog(null, "Grant failed");
+                    }
+                }
+
+            }
+        });
+        btnHome.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame frame = new HomePage();
+                dispose();
+                frame.setVisible(true);
+            }
+        });
+        btnRevokePro.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(comboBox3.getSelectedItem()==null){
+                    JOptionPane.showMessageDialog(null, "Vui lòng chọn đầy đủ thông tin cần grant role");
+                    return;
+                }
+                else{
+
+                    String sql="REVOKE "+comboBox3.getSelectedItem()+ " FROM "+comboBox7.getSelectedItem();
+                    PreparedStatement stmt = null;
+                    try {
+                        stmt = con.prepareStatement(sql);
+                        stmt.execute();
+                        JOptionPane.showMessageDialog(null, "Grant successfully");
+                        setData5();
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                        JOptionPane.showMessageDialog(null, "Grant failed");
+                    }
+                }
+            }
+        });
     }
     public void setData(String owner) {
         PreparedStatement stmt = null;
@@ -293,5 +359,22 @@ public class Role extends JFrame{
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+    public void setData6() {
+        PreparedStatement stmt = null;
+        try {
+            String sql = "select username from dba_users";
+            stmt = con.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+            comboBox7.removeAllItems();
+            // Đổ dữ liệu vào bảng từ ResultSet
+            while (rs.next()) {
+                String proName = rs.getString("username");
+                comboBox7.addItem(proName);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 }
