@@ -36,7 +36,7 @@ public class Login extends JDialog {
             String encryptedPassword="";
             try {
                 CallableStatement stmt = null;
-                String sql = "{?=call caesar_encrypt(?,?)}";
+                String sql = "{? = call caesar_encrypt(?,?)}";
                 stmt=con.prepareCall(sql);
                 stmt.registerOutParameter(1, java.sql.Types.VARCHAR);
                 stmt.setString(2, edtPassword.getText());

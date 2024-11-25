@@ -29,7 +29,7 @@ public class Register extends JFrame {
                     Connection conn = DatabaseConnection.getConnection();
                     CallableStatement stmt = null;
                     if(conn != null) {
-                        String sql = "{CALL CreateUser(?, ?, ?)}";
+                        String sql = "{CALL SYS.CreateUser(?, ?, ?)}";
                         try {
                             stmt=conn.prepareCall(sql);
                             stmt.setString(1, edtUsername.getText());

@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class DatabaseConnection {
     public static final String URL = "jdbc:oracle:thin:@localhost:1521:orcl";
     public static String USER = "sys as sysdba";
-    public static String PASSWORD = "sys";
+    public static String PASSWORD = "vbv";
 
     public static Connection getConnection() {
         try {

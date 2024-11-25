@@ -43,8 +43,8 @@ public class Supplier extends JFrame {
         insertButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String sql = "INSERT INTO SUPPLIERS VALUES(?, ?, ?)";
-                String sql1="INSERT INTO KHANHNE VALUES(?,?)";
+                String sql = "INSERT INTO CLOTHES.SUPPLIERS VALUES(?, ?, ?)";
+                String sql1="INSERT INTO CLOTHES.KHANHNE VALUES(?,?)";
                 SecretKey key = null;
                 try {
                     key = AES.generateKey();
@@ -120,7 +120,7 @@ public class Supplier extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 isUpdatingOrDeleting = true;
-                String sql = "UPDATE SUPPLIERS SET SUPPLIER_NAME=?, CONTACT_INFO=? WHERE SUPPLIER_ID=?";
+                String sql = "UPDATE CLOTHES.SUPPLIERS SET SUPPLIER_NAME=?, CONTACT_INFO=? WHERE SUPPLIER_ID=?";
                 try{
                     String key=loadKey();
                     SecretKey secretKey = new SecretKeySpec(Base64.getDecoder().decode(key), "AES");
@@ -143,13 +143,13 @@ public class Supplier extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 isUpdatingOrDeleting = true;
-                String sql = "DELETE FROM SUPPLIERS WHERE SUPPLIER_ID=?";
+                String sql = "DELETE FROM CLOTHES.SUPPLIERS WHERE SUPPLIER_ID=?";
                 try {
                     PreparedStatement stmt = con.prepareStatement(sql);
                     stmt.setInt(1, Integer.parseInt(edtId.getText()));
                     stmt.executeUpdate();
 
-                    String sqlKey = "DELETE FROM KHANHNE WHERE USERNAME=?";
+                    String sqlKey = "DELETE FROM CLOTHES.KHANHNE WHERE USERNAME=?";
                     PreparedStatement preparedStatement = con.prepareStatement(sqlKey);
                     preparedStatement.setInt(1, Integer.parseInt(edtId.getText()));
                     preparedStatement.executeUpdate();
@@ -171,7 +171,7 @@ public class Supplier extends JFrame {
     }
 
     private void loadData() {
-        String sql="SELECT * FROM SUPPLIERS";
+        String sql="SELECT * FROM CLOTHES.SUPPLIERS";
         try {
             PreparedStatement stmt = con.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
@@ -205,7 +205,7 @@ public class Supplier extends JFrame {
             int id = ((BigDecimal) model.getValueAt(selectRow, 0)).intValue();
             System.out.println("ID: " + id);
             try {
-                String sqlKey = "SELECT name FROM KHANHNE WHERE USERNAME=?";
+                String sqlKey = "SELECT name FROM CLOTHES.KHANHNE WHERE USERNAME=?";
                 PreparedStatement preparedStatement = con.prepareStatement(sqlKey);
                 preparedStatement.setInt(1, id);
                 ResultSet rs = preparedStatement.executeQuery();

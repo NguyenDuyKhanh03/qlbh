@@ -52,7 +52,7 @@ public class Product extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(cbCate.getSelectedItem()!=null){
-                    String sql = "CALL clothes.P_insert_pro(?,?,?,?,?,?)";
+                    String sql = "CALL CLOTHES.P_insert_pro(?,?,?,?,?,?)";
                     try {
                         CallableStatement cs = con.prepareCall(sql);
                         cs.setInt(1, Integer.parseInt(edtId.getText()));
@@ -76,7 +76,7 @@ public class Product extends JFrame {
     }
 
     private void loadCate(){
-        String sql = "CALL P_select_cate(?)";
+        String sql = "CALL CLOTHES.P_select_cate(?)";
         try {
             CallableStatement cs = con.prepareCall(sql);
             cs.registerOutParameter(1, OracleTypes.CURSOR);

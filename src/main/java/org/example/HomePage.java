@@ -31,6 +31,8 @@ public class HomePage extends JFrame {
     private JButton giaiMaButton;
     private JButton btnCate;
     private JTextField edtKey;
+    private JButton btnRole;
+    private JButton btnLoadTable;
     public static String user;
     Connection con = DatabaseConnection.getConnection();
     public static String key="";
@@ -47,7 +49,7 @@ public class HomePage extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
         setLocationRelativeTo(null);
-        setData(user);
+        setData("CLOTHES");
         System.out.println("Owner: " + user);
         loadDataButton.addActionListener(new ActionListener() {
             @Override
@@ -55,7 +57,7 @@ public class HomePage extends JFrame {
                 if(comboBox1.getSelectedItem()!=null){
                     String tableName = comboBox1.getSelectedItem().toString();
                     try {
-                        String sql = "SELECT * FROM " + tableName;
+                        String sql = "SELECT * FROM " + "CLOTHES."+tableName;
                         PreparedStatement stmt = con.prepareStatement(sql);
                         ResultSet rs = stmt.executeQuery();
 
@@ -85,7 +87,7 @@ public class HomePage extends JFrame {
         btn_Logout.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String sql="{CALL SYS.get_sid_serial(?, ?)}";
+                String sql="{CALL get_sid_serial(?, ?)}";
                 CallableStatement stmt = null;
                 try {
                     stmt= con.prepareCall(sql);
@@ -97,7 +99,7 @@ public class HomePage extends JFrame {
                         System.out.println("SID: " + rs.getString("SID") + " SERIAL: " + rs.getString("SERIAL#"));
                         String sql2="{CALL logout(?, ?)}";
                         DatabaseConnection.USER= "sys";
-                        DatabaseConnection.PASSWORD="sys";
+                        DatabaseConnection.PASSWORD="vbv";
 
                         con=DatabaseConnection.getConnection();
 
@@ -199,6 +201,20 @@ public class HomePage extends JFrame {
                 productFrame.setVisible(true);
             }
         });
+        btnRole.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame roleFrame = new Role();
+                dispose();
+                roleFrame.setVisible(true);
+            }
+        });
+        btnLoadTable.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setData("CLOTHES");
+            }
+        });
     }
 
     public void setData(String owner) {
@@ -230,7 +246,7 @@ public class HomePage extends JFrame {
             int id = ((BigDecimal) model.getValueAt(selectRow, 0)).intValue();
             System.out.println("ID: " + id);
             try {
-                String sqlKey="SELECT name FROM KHANHNE WHERE USERNAME=?";
+                String sqlKey=" SELECT name FROM CLOTHES.KHANHNE WHERE USERNAME=?";
                 PreparedStatement preparedStatement=con.prepareStatement(sqlKey);
                 preparedStatement.setInt(1, id);
                 ResultSet rs=preparedStatement.executeQuery();
