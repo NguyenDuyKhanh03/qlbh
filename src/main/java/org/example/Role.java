@@ -27,6 +27,7 @@ public class Role extends JFrame{
     private JTable table1;
     private JComboBox comboBox7;
     private JButton btnHome;
+    private JTable table2;
     Connection con = DatabaseConnection.getConnection();
 
     public Role() {
@@ -54,7 +55,7 @@ public class Role extends JFrame{
         comboBox3.addItem("nv");
 
         setData5();
-
+        setData7();
         setData6();
         btnGrant.addActionListener(new ActionListener() {
             @Override
@@ -205,8 +206,6 @@ public class Role extends JFrame{
                     }
                 }
             }
-
-
         });
         btnGrantPro.addActionListener(new ActionListener() {
             @Override
@@ -224,6 +223,7 @@ public class Role extends JFrame{
                         stmt.execute();
                         JOptionPane.showMessageDialog(null, "Grant successfully");
                         setData5();
+                        setData7();
                     } catch (SQLException ex) {
                         ex.printStackTrace();
                         JOptionPane.showMessageDialog(null, "Grant failed");
@@ -254,11 +254,12 @@ public class Role extends JFrame{
                     try {
                         stmt = con.prepareStatement(sql);
                         stmt.execute();
-                        JOptionPane.showMessageDialog(null, "Grant successfully");
+                        JOptionPane.showMessageDialog(null, "Revoke successfully");
                         setData5();
+                        setData7();
                     } catch (SQLException ex) {
                         ex.printStackTrace();
-                        JOptionPane.showMessageDialog(null, "Grant failed");
+                        JOptionPane.showMessageDialog(null, "Revoke failed");
                     }
                 }
             }
@@ -377,4 +378,35 @@ public class Role extends JFrame{
         }
 
     }
+    public void setData7() {
+        PreparedStatement stmt = null;
+        try {
+            String sql = "select  grantee,granted_role from dba_role_privs where granted_role='ADMIN' or granted_role='NV'";
+            stmt = con.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+
+            ResultSetMetaData rsmd = rs.getMetaData();
+
+            int countColumn=rsmd.getColumnCount();
+            String[] columnNames = new String[countColumn];
+            for (int i=0;i<countColumn;i++){
+                columnNames[i]=rsmd.getColumnName(i+1);
+            }
+            DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+            // Đổ dữ liệu vào bảng từ ResultSet
+            while (rs.next()) {
+                Object[] rowData = new Object[countColumn];
+                for (int i=0;i<countColumn;i++){
+                    rowData[i]=rs.getObject(i+1);
+                }
+                model.addRow(rowData);
+            }
+
+            table2.setModel(model);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

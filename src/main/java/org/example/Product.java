@@ -30,9 +30,6 @@ public class Product extends JFrame {
     public Product() {
         setTitle("Home Page");
         setContentPane(panel1);
-        // Set the content pane to the panel
-        setContentPane(panel1);
-
         // Set the default size and close operation
         setSize(600, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -18,7 +18,7 @@ import java.sql.*;
 import java.util.Base64;
 
 public class HomePage extends JFrame {
-    private JPanel panel1;
+    private JPanel panel2;
     private JTable table1;
     private JComboBox comboBox1;
     private JButton loadDataButton;
@@ -26,13 +26,14 @@ public class HomePage extends JFrame {
     private JButton btnSupplier;
     private JButton btnPro;
     private JButton btnSale;
-    private JButton btnInventory;
     private JButton getKeyButton;
     private JButton giaiMaButton;
     private JButton btnCate;
     private JTextField edtKey;
     private JButton btnRole;
     private JButton btnLoadTable;
+    private JButton policyButton;
+    private JButton btnAudit;
     public static String user;
     Connection con = DatabaseConnection.getConnection();
     public static String key="";
@@ -40,9 +41,9 @@ public class HomePage extends JFrame {
 
     public HomePage() {
         setTitle("Home Page");
-        setContentPane(panel1);
+        setContentPane(panel2);
         // Set the content pane to the panel
-        setContentPane(panel1);
+        setContentPane(panel2);
 
         // Set the default size and close operation
         setSize(400, 500);
@@ -213,6 +214,30 @@ public class HomePage extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setData("CLOTHES");
+            }
+        });
+        policyButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame policyFrame = new Policy();
+                dispose();
+                policyFrame.setVisible(true);
+            }
+        });
+        btnAudit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame auditFrame = new Audit();
+                dispose();
+                auditFrame.setVisible(true);
+            }
+        });
+        btnSale.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame saleFrame = new Sale();
+                dispose();
+                saleFrame.setVisible(true);
             }
         });
     }
