@@ -95,6 +95,13 @@ public class Policy extends JFrame{
                 dispose();
             }
         });
+
+        Timer timer=new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
     }
 
     public void setData(String owner) {

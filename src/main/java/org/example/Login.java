@@ -33,8 +33,15 @@ public class Login extends JDialog {
             homeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         });
         btnLogin.addActionListener(e -> {
+            if(edtUsername.getText().isEmpty() || edtPassword.getText().isEmpty()){
+                JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin.");
+                return;
+            }
+
             String encryptedPassword="";
             try {
+
+
                 CallableStatement stmt = null;
                 String sql = "{? = call caesar_encrypt(?,?)}";
                 stmt=con.prepareCall(sql);
@@ -46,6 +53,7 @@ public class Login extends JDialog {
                 encryptedPassword = stmt.getString(1).toLowerCase();
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
+
             }
 
             DatabaseConnection.USER = edtUsername.getText();
@@ -64,9 +72,9 @@ public class Login extends JDialog {
                 homeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 homeFrame.setVisible(true);
                 dispose();
+                DatabaseManager.isLogin(username);
             }
             else{
-                JOptionPane.showMessageDialog(null, "Login failed");
                 edtUsername.setText("");
                 edtPassword.setText("");
             }

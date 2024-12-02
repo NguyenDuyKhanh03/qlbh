@@ -38,6 +38,7 @@ public class HomePage extends JFrame {
     Connection con = DatabaseConnection.getConnection();
     public static String key="";
     public static int selectRow;
+    public static int count1 = 1;
 
     public HomePage() {
         setTitle("Home Page");
@@ -88,7 +89,7 @@ public class HomePage extends JFrame {
         btn_Logout.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String sql="{CALL get_sid_serial(?, ?)}";
+                String sql="{CALL SYS.get_sid_serial(?, ?)}";
                 CallableStatement stmt = null;
                 try {
                     stmt= con.prepareCall(sql);
@@ -99,22 +100,23 @@ public class HomePage extends JFrame {
                     while(rs.next()){
                         System.out.println("SID: " + rs.getString("SID") + " SERIAL: " + rs.getString("SERIAL#"));
                         String sql2="{CALL logout(?, ?)}";
-                        DatabaseConnection.USER= "sys";
-                        DatabaseConnection.PASSWORD="vbv";
 
-                        con=DatabaseConnection.getConnection();
+                        con=DatabaseManager.getConnection();
 
                         CallableStatement stmt2 = con.prepareCall(sql2);
                         stmt2.setString(1, rs.getString("SID"));
                         stmt2.setString(2, rs.getString("SERIAL#"));
                         stmt2.execute();
+                        System.out.println(user);
+                        DatabaseManager.isLogout(user.toLowerCase());
+                        count1--;
                     }
                     rs.close();
                     con.close();
                     stmt.close();
 
-                    DatabaseConnection.USER="";
-                    DatabaseConnection.PASSWORD="";
+                    DatabaseConnection.USER="sys as sysdba";
+                    DatabaseConnection.PASSWORD="vbv";
 
                     dispose();
                     new Login(null);
@@ -240,6 +242,28 @@ public class HomePage extends JFrame {
                 saleFrame.setVisible(true);
             }
         });
+        Timer[] timer = new Timer[1];
+        timer[0]=new Timer(7000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(!DatabaseManager.isCheckLogin(user)){
+                    timer[0].stop();
+
+                    if(count1>0){
+                        SwingUtilities.invokeLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                dispose();
+                                new Login(null);
+                                count1--;
+                            }
+                        });
+                    }
+                    System.out.println("Timer stopped.");
+                }
+            }
+        });
+        timer[0].start();
     }
 
     public void setData(String owner) {
